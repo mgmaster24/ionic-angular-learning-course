@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable, from } from 'rxjs';
+import { find } from 'rxjs/operators'
 import { Recipe } from './recipe.model';
 
 @Injectable({
@@ -21,15 +23,28 @@ export class RecipesService {
     }
   ];
 
-  constructor() { }
+  private recipes$: Observable<Recipe>;
 
-  get alllRecipes(): Recipe[] {
-    return [...this.recipes];
+  constructor() {
+    this.recipes$ = from(this.recipes);
+   }
+  
+  get Recipes$(): Observable<Recipe> {
+    return this.recipes$
   }
+
+  // getRecipe$(recipeId: string): Recipe {
+  //   return this.recipesSubject.pipe(find());
+  // }
 
   getRecipe(recipeId: string): Recipe {
     return {
       ...this.recipes.find(recipe => recipe.id === recipeId)
     };
+  }
+
+  delete(recipeId: string): void {
+    this.recipes = this.recipes.filter((r) => r.id !== recipeId);
+    
   }
 }

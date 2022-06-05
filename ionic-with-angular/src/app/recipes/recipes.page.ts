@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Observable, of } from 'rxjs';
 import { Recipe } from './recipe.model';
 import { RecipesService } from './recipes.service';
 
@@ -9,12 +10,12 @@ import { RecipesService } from './recipes.service';
   styleUrls: ['./recipes.page.scss'],
 })
 export class RecipesPage implements OnInit {
-  public recipes: Recipe[];
+  public recipes$: Observable<Recipe>;
   constructor(private readonly recipesService: RecipesService,
     private readonly router: Router) { }
 
   ngOnInit() {
-    this.recipes = this.recipesService.alllRecipes;
+    this.recipesService.Recipes$.subscribe(r => of(r))
   }
 
   onRecipeSelected(recipe: Recipe) {
